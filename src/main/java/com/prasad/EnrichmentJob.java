@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EnrichmentJob {
+    public String correlationID;
     private String fileName;
     private String enrichmentStatus;
 }

@@ -1,5 +1,7 @@
 package com.prasad;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,18 +16,24 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 @SpringBootApplication
 @EnableBinding(Source.class)
 @RestController
 public class PublisherApp {
+
+    private Logger logger = LoggerFactory.getLogger(PublisherApp.class);
+
     @Autowired
     private MessageChannel output;
 
     @PostMapping("/publish")
     public String publishEvent(@RequestBody EnrichmentJob enrichmentJob) {
+        logger.info("Generation correlationID");
+        enrichmentJob.setCorrelationID(UUID.randomUUID().toString());
         output.send(MessageBuilder.withPayload(enrichmentJob).build());
-        System.out.println("Batch job published : " + enrichmentJob.toString());
+        logger.info("Batch job published : " + enrichmentJob.toString());
         return ("Batch job published");
     }
 
