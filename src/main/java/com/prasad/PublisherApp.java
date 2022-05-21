@@ -25,14 +25,15 @@ public class PublisherApp {
     @PostMapping("/publish")
     public String publishEvent(@RequestBody EnrichmentJob enrichmentJob) {
         output.send(MessageBuilder.withPayload(enrichmentJob).build());
-        return ("Batch job published : " + enrichmentJob.toString());
+        System.out.println("Batch job published : " + enrichmentJob.toString());
+        return ("Batch job published");
     }
 
     @RequestMapping(value="/healthcheck",method = RequestMethod.GET, produces={MediaType.TEXT_PLAIN_VALUE})
     @ResponseBody
     public ResponseEntity<String> healthcheck() {
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        String responseText = "Healthcheck @ "+ timeStamp+" - All OK";
+        String responseText = "Publisher Healthcheck @ "+ timeStamp+" - All OK";
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.TEXT_PLAIN).body(responseText.toString());
     }
 
